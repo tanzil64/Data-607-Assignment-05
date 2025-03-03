@@ -1,0 +1,105 @@
+---
+title: "DATA 607"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+
+flights <- read.csv("C:\\Users\\tanzi\\OneDrive\\DATA\\607\\Week5\\tanzildata.csv ")
+
+flights
+```
+
+You can add options to executable code like this
+
+```{r}
+flights
+```
+
+```{r}
+colnames(flights)[1] <- "airline"
+colnames(flights)[2] <- "arrival_status"
+
+
+
+df <-data.frame(flights)
+df
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+```{r}
+df <- drop_na(df)
+df
+```
+
+```{r}
+df[df==""]<-NA
+df<- fill(df, airline)
+df
+```
+
+```{}
+```
+
+```{}
+```
+
+```{r}
+df <- pivot_longer(df, cols = !c(airline, arrival_status), 
+                   names_to = 'city', values_to = 'frequency')
+head(df)
+```
+
+```{r}
+df1$city <- str_replace_all(df1$city, "\\.", " ")
+df1
+
+```
+
+```{r}
+df<-data.frame(df1)
+df
+```
+
+```{r}
+airline_df <-
+  df %>% 
+    group_by(airline) %>%
+      summarise(
+        num_flights = sum(frequency),
+        num_delays = sum(ifelse(destination=='delayed', frequency, 0))
+      )
+
+airline_df <- 
+  airline_df %>%
+    mutate(
+        num_on_time = num_flights - num_delays,
+        delay_rate = num_delays / num_flights,
+        on_time_rate = (num_flights - num_delays) / num_flights
+    ) %>%
+      arrange(delay_rate)
+airline_df
+```
+
+```{r}
+write.csv(df,"flightinfo.csv")
+```
+
+```         
+write.csv(df,"flightinfo.csv")
+```
